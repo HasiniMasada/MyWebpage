@@ -1,0 +1,338 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AICart - Online Shopping</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;color:#24364b;background:#fff}
+button,input{font:inherit}
+a{text-decoration:none;color:inherit}
+.announcement{background:#142b4a;color:white;text-align:center;padding:10px;font-size:13px}
+header{display:flex;align-items:center;gap:20px;padding:20px 5%;flex-wrap:wrap}
+.logo{font-size:30px;font-weight:bold;color:#142b4a}
+.logo span{color:#2864c5}
+.search{display:flex;flex:1;min-width:220px}
+.search input{flex:1;padding:13px;border:1px solid #ddd;border-radius:8px 0 0 8px;min-width:0}
+button{cursor:pointer}
+.search button,.primary{background:#2864c5;color:white;border:0;padding:12px 18px;border-radius:7px}
+.search button{border-radius:0 8px 8px 0}
+.cart-link{background:#eef4ff;padding:12px;border-radius:8px;font-weight:bold}
+nav{display:flex;gap:24px;padding:15px 5%;overflow-x:auto;white-space:nowrap;border-block:1px solid #eee;position:sticky;top:0;background:white;z-index:5;font-size:14px;font-weight:bold}
+nav a:hover{color:#2864c5}
+.hero{margin:25px 4%;border-radius:16px;background:#eaf1ff;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;align-items:center}
+.hero-copy{padding:35px}
+.hero h1{font-size:clamp(35px,5vw,55px);color:#142b4a;margin:12px 0}
+.hero p{line-height:1.7;color:#617086}
+.hero img{width:100%;height:320px;object-fit:cover}
+.eyebrow{color:#2864c5;font-weight:bold;font-size:12px;letter-spacing:1px}
+main{padding:10px 4% 40px}
+h2{color:#142b4a}
+.section-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.filters{display:flex;gap:9px;overflow-x:auto;padding:10px 0 18px}
+.pill{border:1px solid #ddd;background:white;padding:9px 15px;border-radius:30px;white-space:nowrap}
+.pill.active,.pill:hover{background:#142b4a;color:white}
+.product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.product{border:1px solid #e5eaf1;border-radius:12px;overflow:hidden;transition:.2s;background:white}
+.product:hover{transform:translateY(-4px);box-shadow:0 8px 25px #142b4a15}
+.product-image{height:190px;position:relative;background:#f4f6f9}
+.product-image img{width:100%;height:100%;object-fit:cover}
+.tag{position:absolute;left:9px;top:9px;background:white;color:#16805d;padding:5px;border-radius:4px;font-size:10px;font-weight:bold}
+.wish{position:absolute;right:9px;top:9px;border:0;border-radius:50%;width:30px;height:30px;background:white;font-size:18px}
+.wish.liked{color:#e34468}
+.product-info{padding:13px}
+.category{font-size:11px;color:#718096;text-transform:uppercase}
+.product h3{font-size:14px;min-height:34px}
+.rating{font-size:12px;color:#d28a13}
+.price-line{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.price{font-size:18px;font-weight:bold;color:#142b4a}
+.old{font-size:11px;text-decoration:line-through;color:#999}
+.discount{font-size:11px;color:#16805d;font-weight:bold}
+.add-btn{width:100%;border:1px solid #2864c5;color:#2864c5;background:white;padding:10px;border-radius:7px;font-weight:bold}
+.add-btn:hover{background:#2864c5;color:white}
+.promo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:35px 0}
+.promo-card{background:#eef4ff;padding:22px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.promo-card:nth-child(2){background:#fff3e8}
+.promo-card img{width:100px;height:100px;object-fit:cover;border-radius:8px}
+.cart-section{background:#f7f9fc;border:1px solid #e5eaf1;border-radius:12px;padding:22px;margin-top:35px}
+.cart-layout{display:grid;grid-template-columns:1fr 260px;gap:25px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-bottom:1px solid #e5eaf1;font-size:13px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{background:white;border:1px solid #ddd;border-radius:5px;width:28px;height:28px}
+.summary{background:white;padding:16px;border:1px solid #e5eaf1;border-radius:10px;height:max-content}
+.summary-row{display:flex;justify-content:space-between;margin:14px 0;font-size:13px}
+.summary .primary,.clear{width:100%;margin-top:8px}
+.clear{padding:10px;border:1px solid #ddd;border-radius:7px;background:white}
+footer{background:#142b4a;color:white;padding:30px 5%;margin-top:25px}
+footer p{color:#c5d2e2;font-size:13px;line-height:1.7}
+footer a{color:#c5d2e2;margin-right:15px;font-size:13px}
+.toast{position:fixed;bottom:20px;right:20px;background:#142b4a;color:white;padding:14px 18px;border-radius:8px;display:none;z-index:20}
+@media(max-width:950px){.product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){header{gap:12px;padding:15px}.search{order:3;flex-basis:100%}.hero{grid-template-columns:1fr}.hero-copy{padding:25px}.hero img{height:220px}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-image{height:145px}.product-info{padding:9px}.product h3{font-size:12px}.promo{grid-template-columns:1fr}.cart-layout{grid-template-columns:1fr}.cart-section{padding:14px}}
+@media(max-width:380px){.product-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+<div class="announcement">✨ Welcome to AICart — great finds for everyday life!</div>
+
+<header>
+  <a class="logo" href="#">AI<span>Cart</span> ✦</a>
+  <form class="search" id="searchForm">
+    <input id="searchInput" type="search" placeholder="Search products..." aria-label="Search products">
+    <button type="submit">Search</button>
+  </form>
+  <a class="cart-link" href="#cart">🛒 Cart (<span id="count">0</span>)</a>
+</header>
+
+<nav>
+  <a href="#products">All Products</a>
+  <a href="#products" data-cat="Fashion">Fashion</a>
+  <a href="#products" data-cat="Electronics">Electronics</a>
+  <a href="#products" data-cat="Books & Stationery">Stationery</a>
+  <a href="#products" data-cat="Home & Kitchen">Home & Kitchen</a>
+  <a href="#products" data-cat="Beauty">Beauty</a>
+  <a href="#products" data-cat="Grocery">Grocery</a>
+  <a href="#cart">My Cart</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">YOUR EVERYDAY SHOPPING DESTINATION</div>
+    <h1>Little things.<br>Big happy.</h1>
+    <p>Discover useful essentials, fresh styles and smart picks for every part of your day — all in one place.</p>
+    <button class="primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop now →</button>
+  </div>
+  <img src="https://images.unsplash.com/photo-1607082349566-187342175e2f?w=1000" alt="Shopping collection">
+</section>
+
+<main>
+<section id="products">
+  <div class="section-head">
+    <div><h2>Popular Products</h2><p>Find something you love.</p></div>
+    <span id="resultCount"></span>
+  </div>
+
+  <div class="filters" id="filters">
+    <button class="pill active" data-filter="All">All Products</button>
+    <button class="pill" data-filter="Fashion">Fashion</button>
+    <button class="pill" data-filter="Electronics">Electronics</button>
+    <button class="pill" data-filter="Books & Stationery">Stationery</button>
+    <button class="pill" data-filter="Home & Kitchen">Home & Kitchen</button>
+    <button class="pill" data-filter="Beauty">Beauty</button>
+    <button class="pill" data-filter="Grocery">Grocery</button>
+    <button class="pill" data-filter="Accessories">Accessories</button>
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<section class="promo">
+  <div class="promo-card">
+    <div><div class="eyebrow">HOME ESSENTIALS</div><h3>Refresh your space</h3><p>Simple picks for your home.</p><button class="primary" onclick="chooseCategory('Home & Kitchen')">Explore</button></div>
+    <img src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?w=300" alt="Home decor">
+  </div>
+  <div class="promo-card">
+    <div><div class="eyebrow">FRESH FINDS</div><h3>Update your style</h3><p>Find your next favourite.</p><button class="primary" onclick="chooseCategory('Fashion')">Explore</button></div>
+    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=300" alt="Fashion">
+  </div>
+</section>
+
+<section class="cart-section" id="cart">
+  <h2>🛒 Your Shopping Cart</h2>
+  <div class="cart-layout">
+    <div>
+      <div id="cartItems"></div>
+      <p id="emptyMessage">Your cart is empty. Start shopping!</p>
+    </div>
+    <aside class="summary">
+      <h3>Order Summary</h3>
+      <div class="summary-row"><span>Items</span><span id="summaryCount">0</span></div>
+      <div class="summary-row"><span>Delivery</span><span id="delivery">—</span></div>
+      <div class="summary-row"><strong>Total</strong><strong>₹<span id="total">0</span></strong></div>
+      <button class="primary" onclick="checkout()">Checkout</button>
+      <button class="clear" onclick="clearCart()">Clear Cart</button>
+      <p style="font-size:10px;color:#718096">Demo checkout only. No real payment is processed.</p>
+    </aside>
+  </div>
+</section>
+</main>
+
+<footer>
+  <h2 style="color:white">AICart ✦</h2>
+  <p>Your everyday shopping destination. A student-made demo store built with HTML, CSS and JavaScript.</p>
+  <a href="#products">Products</a>
+  <a href="#cart">Shopping Cart</a>
+  <p>© 2026 AICart. All rights reserved.</p>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const products = [
+{id:1,name:"Running Shoes",category:"Fashion",price:999,old:1499,rating:4.5,tag:"BESTSELLER",image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"},
+{id:2,name:"Cotton T-Shirt",category:"Fashion",price:399,old:599,rating:4.3,tag:"POPULAR",image:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500"},
+{id:3,name:"Casual Shirt",category:"Fashion",price:549,old:799,rating:4.2,tag:"DEAL",image:"https://images.unsplash.com/photo-1603252109303-2751441dd157?w=500"},
+{id:4,name:"Floral Dress",category:"Fashion",price:799,old:1199,rating:4.6,tag:"TRENDING",image:"https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=500"},
+{id:5,name:"Denim Jeans",category:"Fashion",price:899,old:1299,rating:4.4,tag:"POPULAR",image:"https://images.unsplash.com/photo-1542272604-787c3835535d?w=500"},
+{id:6,name:"Hoodie",category:"Fashion",price:999,old:1499,rating:4.4,tag:"DEAL",image:"https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500"},
+{id:7,name:"Everyday Backpack",category:"Accessories",price:799,old:1099,rating:4.5,tag:"POPULAR",image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500"},
+{id:8,name:"Sunglasses",category:"Accessories",price:299,old:499,rating:4.1,tag:"DEAL",image:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=500"},
+{id:9,name:"Wrist Watch",category:"Accessories",price:699,old:999,rating:4.2,tag:"POPULAR",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"},
+{id:10,name:"Fashion Earrings",category:"Accessories",price:249,old:399,rating:4.0,tag:"NEW",image:"https://images.unsplash.com/photo-1611652022419-a9419f74343d?w=500"},
+{id:11,name:"Wireless Headphones",category:"Electronics",price:1299,old:1799,rating:4.6,tag:"BESTSELLER",image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"},
+{id:12,name:"Bluetooth Speaker",category:"Electronics",price:899,old:1299,rating:4.3,tag:"DEAL",image:"https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=500"},
+{id:13,name:"Wireless Mouse",category:"Electronics",price:449,old:699,rating:4.2,tag:"POPULAR",image:"https://images.unsplash.com/photo-1527814050087-3793815479db?w=500"},
+{id:14,name:"Phone Stand",category:"Electronics",price:199,old:299,rating:4.0,tag:"VALUE",image:"https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=500"},
+{id:15,name:"Smart Watch",category:"Electronics",price:1599,old:2299,rating:4.4,tag:"TRENDING",image:"https://images.unsplash.com/photo-1509255929945-586a420363cf?w=500"},
+{id:16,name:"Study Books",category:"Books & Stationery",price:349,old:499,rating:4.5,tag:"VALUE",image:"https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=500"},
+{id:17,name:"Pen Set",category:"Books & Stationery",price:99,old:149,rating:4.1,tag:"VALUE",image:"https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500"},
+{id:18,name:"Notebook",category:"Books & Stationery",price:129,old:179,rating:4.2,tag:"POPULAR",image:"https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=500"},
+{id:19,name:"Desk Organizer",category:"Books & Stationery",price:249,old:349,rating:4.0,tag:"NEW",image:"https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500"},
+{id:20,name:"Coffee Mug",category:"Home & Kitchen",price:199,old:299,rating:4.4,tag:"POPULAR",image:"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=500"},
+{id:21,name:"Water Bottle",category:"Home & Kitchen",price:249,old:399,rating:4.3,tag:"VALUE",image:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=500"},
+{id:22,name:"Table Lamp",category:"Home & Kitchen",price:699,old:999,rating:4.2,tag:"TRENDING",image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500"},
+{id:23,name:"Cushion Cover",category:"Home & Kitchen",price:299,old:449,rating:4.1,tag:"NEW",image:"https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=500"},
+{id:24,name:"Storage Basket",category:"Home & Kitchen",price:349,old:499,rating:4.0,tag:"VALUE",image:"https://images.unsplash.com/photo-1593085260707-5377ba37f868?w=500"},
+{id:25,name:"Face Cleanser",category:"Beauty",price:249,old:349,rating:4.3,tag:"POPULAR",image:"https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?w=500"},
+{id:26,name:"Daily Moisturizer",category:"Beauty",price:299,old:399,rating:4.4,tag:"BESTSELLER",image:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500"},
+{id:27,name:"Lip Balm",category:"Beauty",price:99,old:149,rating:4.1,tag:"VALUE",image:"https://images.unsplash.com/photo-1586495777744-4413f21062fa?w=500"},
+{id:28,name:"Body Care Gift Set",category:"Beauty",price:599,old:899,rating:4.2,tag:"GIFT PICK",image:"https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=500"},
+{id:29,name:"Basmati Rice 5 kg",category:"Grocery",price:499,old:599,rating:4.5,tag:"POPULAR",image:"https://images.unsplash.com/photo-1586201375761-83865001e31c?w=500"},
+{id:30,name:"Coffee Beans",category:"Grocery",price:349,old:449,rating:4.6,tag:"FAVOURITE",image:"https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=500"},
+{id:31,name:"Oats Pack",category:"Grocery",price:179,old:229,rating:4.2,tag:"VALUE",image:"https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=500"},
+{id:32,name:"Dry Fruit Mix",category:"Grocery",price:399,old:499,rating:4.4,tag:"POPULAR",image:"https://images.unsplash.com/photo-1604495772376-9657f0035eb5?w=500"}
+];
+
+let selectedCategory="All";
+let cart=[];
+const money=n=>n.toLocaleString("en-IN");
+
+function renderProducts(){
+ const query=document.getElementById("searchInput").value.trim().toLowerCase();
+ const filtered=products.filter(p=>
+   (selectedCategory==="All"||p.category===selectedCategory)&&
+   (p.name.toLowerCase().includes(query)||p.category.toLowerCase().includes(query))
+ );
+ document.getElementById("resultCount").textContent=filtered.length+" products";
+ const grid=document.getElementById("productGrid");
+ if(!filtered.length){
+   grid.innerHTML='<p style="grid-column:1/-1;text-align:center;padding:35px">No products found. Try another search.</p>';
+   return;
+ }
+ grid.innerHTML=filtered.map(p=>`
+ <article class="product">
+  <div class="product-image">
+   <img src="${p.image}" alt="${p.name}" loading="lazy"
+    onerror="this.onerror=null;this.src='https://placehold.co/500x350/eaf1ff/142b4a?text=AICart'">
+   <span class="tag">${p.tag}</span>
+   <button class="wish" onclick="toggleWish(this)" aria-label="Wishlist">♡</button>
+  </div>
+  <div class="product-info">
+   <div class="category">${p.category}</div>
+   <h3>${p.name}</h3>
+   <div class="rating">★ ${p.rating} <span style="color:#8793a2">Customer rating</span></div>
+   <div class="price-line">
+    <span class="price">₹${money(p.price)}</span>
+    <span class="old">₹${money(p.old)}</span>
+    <span class="discount">${Math.round((1-p.price/p.old)*100)}% off</span>
+   </div>
+   <button class="add-btn" onclick="addToCart(${p.id})">＋ Add to Cart</button>
+  </div>
+ </article>`).join("");
+}
+
+function chooseCategory(category){
+ selectedCategory=category;
+ document.querySelectorAll(".pill").forEach(b=>b.classList.toggle("active",b.dataset.filter===category));
+ renderProducts();
+ document.getElementById("products").scrollIntoView({behavior:"smooth"});
+}
+function toggleWish(button){
+ button.classList.toggle("liked");
+ button.textContent=button.classList.contains("liked")?"♥":"♡";
+ showToast(button.classList.contains("liked")?"Added to wishlist":"Removed from wishlist");
+}
+function addToCart(id){
+ const product=products.find(p=>p.id===id);
+ const item=cart.find(p=>p.id===id);
+ if(item)item.qty++;else cart.push({...product,qty:1});
+ renderCart();
+ showToast(product.name+" added to cart");
+}
+function changeQty(id,delta){
+ const item=cart.find(p=>p.id===id);
+ if(!item)return;
+ item.qty+=delta;
+ if(item.qty<=0)cart=cart.filter(p=>p.id!==id);
+ renderCart();
+}
+function renderCart(){
+ const list=document.getElementById("cartItems");
+ let count=0,total=0;
+ if(cart.length===0){
+   list.innerHTML="";
+   document.getElementById("emptyMessage").style.display="block";
+ }else{
+   document.getElementById("emptyMessage").style.display="none";
+   list.innerHTML=cart.map(p=>{
+     count+=p.qty;total+=p.price*p.qty;
+     return `<div class="cart-item">
+       <div><strong>${p.name}</strong><br><small>₹${money(p.price)} each</small></div>
+       <div class="qty">
+        <button onclick="changeQty(${p.id},-1)">−</button>
+        <span>${p.qty}</span>
+        <button onclick="changeQty(${p.id},1)">+</button>
+       </div>
+       <strong>₹${money(p.price*p.qty)}</strong>
+      </div>`;
+   }).join("");
+ }
+ document.getElementById("count").textContent=count;
+ document.getElementById("summaryCount").textContent=count;
+ document.getElementById("total").textContent=money(total);
+ document.getElementById("delivery").textContent=total===0?"—":total>=999?"FREE":"₹49";
+}
+function clearCart(){
+ cart=[];
+ renderCart();
+ showToast("Cart cleared");
+}
+function checkout(){
+ if(!cart.length){showToast("Your cart is empty");return;}
+ const subtotal=cart.reduce((sum,p)=>sum+p.price*p.qty,0);
+ const delivery=subtotal>=999?0:49;
+ alert("Thank you for shopping with AICart!\\nItems: "+
+  cart.reduce((sum,p)=>sum+p.qty,0)+
+  "\\nTotal including delivery: ₹"+money(subtotal+delivery)+
+  "\\n\\nDemo only. No real order or payment was made.");
+ clearCart();
+}
+function showToast(message){
+ const toast=document.getElementById("toast");
+ toast.textContent=message;
+ toast.style.display="block";
+ clearTimeout(window.toastTimer);
+ window.toastTimer=setTimeout(()=>toast.style.display="none",2200);
+}
+
+document.getElementById("searchInput").addEventListener("input",renderProducts);
+document.getElementById("searchForm").addEventListener("submit",event=>{
+ event.preventDefault();
+ renderProducts();
+ document.getElementById("products").scrollIntoView({behavior:"smooth"});
+});
+document.querySelectorAll(".pill").forEach(button=>{
+ button.addEventListener("click",()=>chooseCategory(button.dataset.filter));
+});
+document.querySelectorAll("[data-cat]").forEach(link=>{
+ link.addEventListener("click",()=>chooseCategory(link.dataset.cat));
+});
+
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
