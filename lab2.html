@@ -1,0 +1,357 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Event Management Portal</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #fff4e6;
+            color: #4b1522;
+        }
+
+        /* Navbar */
+        header {
+            background-color: #800020;
+            color: #fff4e6;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        header h2 {
+            font-size: 24px;
+        }
+
+        nav a {
+            color: #fff4e6;
+            text-decoration: none;
+            margin: 10px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ffd9a0;
+        }
+
+        /* Home Section */
+        .hero {
+            text-align: center;
+            padding: 70px 20px;
+            background-color: #f3dfc1;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            color: #800020;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #800020;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        button:hover {
+            background-color: #5c0018;
+        }
+
+        /* Events Section */
+        .events {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .events h2 {
+            color: #800020;
+            margin-bottom: 25px;
+        }
+
+        #search {
+            padding: 12px;
+            width: 80%;
+            max-width: 400px;
+            border: 2px solid #800020;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+
+        .event-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .card {
+            background-color: #fffaf2;
+            width: 280px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px #c9a99b;
+            text-align: left;
+        }
+
+        .card h3 {
+            color: #800020;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            margin: 10px 0;
+        }
+
+        .card button {
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        /* Registration */
+        .registration {
+            background-color: #f3dfc1;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .registration h2 {
+            color: #800020;
+            margin-bottom: 20px;
+        }
+
+        .registration input {
+            display: block;
+            margin: 12px auto;
+            padding: 12px;
+            width: 80%;
+            max-width: 350px;
+            border: 1px solid #800020;
+            border-radius: 5px;
+        }
+
+        /* About */
+        .about {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .about h2 {
+            color: #800020;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background-color: #800020;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        @media(max-width: 600px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav a {
+                display: inline-block;
+                margin: 5px;
+            }
+
+            .hero h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header>
+        <h2>🎓 UniEvents</h2>
+
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#events">Events</a>
+            <a href="#register">Register</a>
+            <a href="#about">About</a>
+        </nav>
+    </header>
+
+    <!-- Home -->
+    <section class="hero" id="home">
+        <h1>University Event Management Portal</h1>
+
+        <p>
+            Discover exciting academic and extracurricular
+            events happening at our university!
+        </p>
+
+        <button onclick="showEvents()">Explore Events</button>
+    </section>
+
+    <!-- Events -->
+    <section class="events" id="events">
+
+        <h2>Upcoming Events</h2>
+
+        <input type="text" id="search"
+        placeholder="Search events..."
+        onkeyup="searchEvents()">
+
+        <div class="event-container" id="eventList">
+
+            <div class="card">
+                <h3>Technical Fest</h3>
+                <p>📅 Date: 15 November 2026</p>
+                <p>📍 Venue: College Auditorium</p>
+                <p>💻 Technical competitions and workshops.</p>
+                <button onclick="registerEvent('Technical Fest')">
+                    Register Now
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>Cultural Fest</h3>
+                <p>📅 Date: 20 November 2026</p>
+                <p>📍 Venue: Open Ground</p>
+                <p>🎵 Dance, music and cultural activities.</p>
+                <button onclick="registerEvent('Cultural Fest')">
+                    Register Now
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>Sports Meet</h3>
+                <p>📅 Date: 25 November 2026</p>
+                <p>📍 Venue: Sports Ground</p>
+                <p>🏆 Indoor and outdoor sports competitions.</p>
+                <button onclick="registerEvent('Sports Meet')">
+                    Register Now
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Registration -->
+    <section class="registration" id="register">
+
+        <h2>Student Registration</h2>
+
+        <form onsubmit="submitForm(event)">
+
+            <input type="text" id="name"
+            placeholder="Enter Your Name" required>
+
+            <input type="email" id="email"
+            placeholder="Enter Your Email" required>
+
+            <input type="text" id="selectedEvent"
+            placeholder="Selected Event" required>
+
+            <button type="submit">Submit Registration</button>
+
+        </form>
+
+        <p id="message"></p>
+
+    </section>
+
+    <!-- About -->
+    <section class="about" id="about">
+
+        <h2>About Us</h2>
+
+        <p>
+            UniEvents is a university event management portal
+            designed to help students explore upcoming events,
+            register for activities and participate in college events.
+        </p>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 UniEvents | University Event Management Portal</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+
+        function showEvents() {
+            document.getElementById("events").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function registerEvent(eventName) {
+            document.getElementById("selectedEvent").value = eventName;
+
+            document.getElementById("register").scrollIntoView({
+                behavior: "smooth"
+            });
+        }
+
+        function searchEvents() {
+
+            let input = document.getElementById("search")
+                .value.toLowerCase();
+
+            let cards = document.querySelectorAll(".card");
+
+            cards.forEach(function(card) {
+
+                let eventName = card.innerText.toLowerCase();
+
+                if(eventName.includes(input)) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+
+            });
+        }
+
+        function submitForm(event) {
+
+            event.preventDefault();
+
+            let name = document.getElementById("name").value;
+            let eventName = document.getElementById("selectedEvent").value;
+
+            document.getElementById("message").innerHTML =
+                "Thank you " + name +
+                "! Your registration for " + eventName +
+                " is successful.";
+
+            document.getElementById("message").style.color = "#800020";
+
+            document.querySelector("form").reset();
+        }
+
+    </script>
+
+</body>
+</html>
